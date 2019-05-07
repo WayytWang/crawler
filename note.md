@@ -13,3 +13,8 @@
 - Scheduler 2 : 并发分发Requets (无法控制worker)
 - Scheduler 3 : Request队列和Worker队列
 - 正则表达式
+
+
+URl去重(已经访问)
+- 哈希表
+- 

@@ -18,17 +18,19 @@ var rateLimit = time.Tick(100 * time.Millisecond)
 
 //Fetch 訪問url 得到返回值
 func Fetch(url string) ([]byte, error) {
-	<-rateLimit
+	//<-rateLimit
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Fatalln(err)
+		return nil, err
 	}
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36")
 
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalln(err)
+		return nil, err
 	}
 
 	defer resp.Body.Close()

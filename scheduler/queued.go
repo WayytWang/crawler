@@ -11,14 +11,17 @@ func (s *QueuedScheduler) Submit(r engine.Request) {
 	s.requestChan <- r
 }
 
-func (s *QueuedScheduler) workerReady(w chan engine.Request) {
+func (s *QueuedScheduler) WorkerReady(w chan engine.Request) {
 	s.workerChan <- w
 }
 
-func (s *QueuedScheduler) ConfigureMasterWorkerChan(c chan engine.Request) {
-	panic("implement me")
+func (s *QueuedScheduler) WorkerChan() chan engine.Request {
+	return make(chan engine.Request)
 }
 
+//1.request存放到队列中
+//2.worker存放到worker队列中
+//3.符合条件的情况下 将request放入worker中
 func (s *QueuedScheduler) Run() {
 	s.workerChan = make(chan chan engine.Request)
 	s.requestChan = make(chan engine.Request)
@@ -42,6 +45,7 @@ func (s *QueuedScheduler) Run() {
 				requestQ = append(requestQ, r)
 			case w := <-s.workerChan:
 				workerQ = append(workerQ, w)
+			//send request to worker
 			case activeWorker <- activeRequest:
 				workerQ = workerQ[1:]
 				requestQ = requestQ[1:]
